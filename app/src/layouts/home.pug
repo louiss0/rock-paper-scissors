@@ -1,10 +1,124 @@
-extends ./main.pug
 
 include ../mixins/container.pug
 
+mixin computerIcon
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M528 0h-480C21.5 0 0 21.5 0 48v320C0 394.5 21.5 416 48 416h192L224 464H152C138.8 464 128 474.8 128 488S138.8 512 152 512h272c13.25 0 24-10.75 24-24s-10.75-24-24-24H352L336 416h192c26.5 0 48-21.5 48-48v-320C576 21.5 554.5 0 528 0zM512 288H64V64h448V288z"/></svg>
+
+mixin faceIcon
+    <svg class="text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 22a8 8 0 1 1 16 0H4zm8-9c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6z"/></svg>
+
+mixin scissorsIcon
+    <svg class="text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M9.446 8.032L12 10.586l6.728-6.728a2 2 0 0 1 2.828 0l-12.11 12.11a4 4 0 1 1-1.414-1.414L10.586 12 8.032 9.446a4 4 0 1 1 1.414-1.414zm5.38 5.38l6.73 6.73a2 2 0 0 1-2.828 0l-5.317-5.316 1.415-1.415zm-7.412 3.174a2 2 0 1 0-2.828 2.828 2 2 0 0 0 2.828-2.828zm0-9.172a2 2 0 1 0-2.828-2.828 2 2 0 0 0 2.828 2.828z"/></svg>
+
+mixin rockIcon
+    <svg class="text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M144.1 179.2C173.8 127.7 228.6 96 288 96C347.4 96 402.2 127.7 431.9 179.2L540.4 368C552.7 389.4 537.3 416 512.7 416H63.31C38.7 416 23.31 389.4 35.57 368L144.1 179.2z"/></svg>
+
+mixin paperIcon
+    <svg class="text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 22H5a3 3 0 0 1-3-3V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v12h4v4a3 3 0 0 1-3 3zm-1-5v2a1 1 0 0 0 2 0v-2h-2zM6 7v2h8V7H6zm0 4v2h8v-2H6zm0 4v2h5v-2H6z"/></svg>
+
+mixin playerBox(type)
+
+    figure.h-24.relative(class="w-2/5" w:md="w-3/5 h-64" w:lg="w-4/5" id=`${type}-image`)
+
+        if block 
+        
+           block 
+        
+        else
+          p.text-red-500 No icon to display here            
+        
+        
+        .w-full.h-full.transform.bg-amber-500(
+            class="scale-0 origin-center absolute"
+            data-icon="Rock")
+            +rockIcon
+        
+        .w-full.h-full.transform.bg-gray-500(
+            class="scale-0 origin-center absolute"
+            data-icon="Paper")
+            +paperIcon
+        
+        
+        .w-full.h-full.transform.bg-green-500(
+            class="scale-0 origin-center absolute"
+            data-icon="Scissors")
+            +scissorsIcon
+
+
 block main
 
-    +container("w-10/12")
-        h1.text-gray-700.px-4.py-6.text-center.
-            You are using windicss and vite 
+    
+    +container("grid gap-8 w-9/12 min-h-lg m-16")(
+        id="game-container"
+        w:border="2 gray-500 dotted"
+    )
 
+        .grid.place-items-center
+            h1 Rock Paper Scissors
+
+        .grid.gap-4(
+            w:md="grid-cols-2 gap-8"
+        )
+
+            .grid.place-items-center.gap-2(
+                w:md="gap-4"
+                w:lg="gap-6"
+            )
+
+                .text-lg.font-bold Player Side
+                
+                
+                +playerBox("human")
+
+                    .w-full.h-full.transform.bg-white(
+                        class="transition-transform duration-200 ease-in origin-center absolute"
+                        data-icon="human")
+        
+                        +faceIcon
+        
+                input.px-2.py-4(
+                    required
+                    value="Rock"
+                    list="rps-choices"
+                    id="rps-input"
+                    title="Rock paper Scissors Choices"
+                    pattern="(Rock|Paper|Scissors)"
+                    w:focus="ring-current ring-2 ring-offset-2 ring-offset-light-100 outline-none"
+                    w:invalid="bg-red-300 ring-red-500"
+                    w:invalid:sibling="inline-block"
+                    
+                    )
+                small.m-2.text-red-500.hidden. 
+                    Wrong Choice Must be Rock Paper or Scissors
+                
+                datalist#rps-choices
+                    option(value="Rock") 
+                    option(value="Paper") 
+                    option(value="Scissors") 
+                            
+                
+            
+            .grid.place-items-center  
+                
+                .text-lg.font-bold Computer Side
+
+                +playerBox("computer")
+
+                    .w-full.h-full.transform.bg-slate-300(
+                        class="transition-transform duration-200 ease-in origin-center absolute"
+                        data-icon="computer"
+                        )
+                        
+                        +computerIcon
+
+                .text-md
+                
+                    .px-4.py-6
+                        
+
+
+
+
+
+
+        
