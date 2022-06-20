@@ -1,0 +1,8 @@
+mixin container(extraClasses)
+
+    .mx-auto.max-w-screen-lg(class=extraClasses)&attributes(attributes)
+
+        if block 
+            block 
+        else 
+            p.text-red-500 Nothing to contain here

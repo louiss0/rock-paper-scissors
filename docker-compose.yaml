@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+
+  # This service is the server for the app
+  server:
+
+    ports:
+      
+      # This is the default port for the server
+      - "3000:3000"
+
+    build: 
+      
+      # The context is the root folder
+      context: ./
+      
+      dockerfile: dockerfiles/server.dockerfile
+
+    volumes:
+    
+
+      - ./app:/app # This volume is the volume for the app
+      
+      - /app/node_modules # This volume is for the node modules folder 
+
+
+  # This service is the utility container for npm
+  npm:
+    
+    build: 
+      
+      # The context is the root folder
+      context: ./
+      
+      dockerfile: dockerfiles/npm.dockerfile
+    
+    stdin_open: true 
+    
+    tty: true
+
+    volumes:
+      
+      - ./app:/app:delegated
+      
+
